@@ -22,6 +22,28 @@ unsafe fn game_throwb(fighter: &mut L2CAgentBase) {
         }
 }
 
+#[acmd_script( agent = "purin", script = "expression_throwb", category = ACMD_EXPRESSION, low_priority )]
+unsafe fn expression_throwb(fighter: &mut L2CAgentBase) {
+    let lua_state = fighter.lua_state_agent;
+    let boma = fighter.boma();
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE, *SLOPE_STATUS_LR);
+        }
+    frame(lua_state, 8.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_TOP, 6);
+    }
+    frame(lua_state, 26.0);
+    if is_excute(fighter) {
+        RUMBLE_HIT(fighter, Hash40::new("rbkind_attackm"), 0);
+        QUAKE(fighter, *CAMERA_QUAKE_KIND_M);
+    }
+    frame(lua_state, 28.0);
+    if is_excute(fighter) {
+        slope!(fighter, *MA_MSC_CMD_SLOPE_SLOPE_INTP, *SLOPE_STATUS_LR, 8);
+    }
+}
+
 #[acmd_script( agent = "purin", script = "game_throwf" , category = ACMD_GAME , low_priority)]
 unsafe fn game_throwf(fighter: &mut L2CAgentBase) {
     let lua_state = fighter.lua_state_agent;
@@ -61,6 +83,8 @@ unsafe fn game_throwhi(fighter: &mut L2CAgentBase) {
      if is_excute(fighter){
         ATK_HIT_ABS(fighter, *FIGHTER_ATTACK_ABSOLUTE_KIND_THROW, Hash40::new("throw"),WorkModule::get_int64(boma, *FIGHTER_STATUS_THROW_WORK_INT_TARGET_OBJECT),WorkModule::get_int64(boma, *FIGHTER_STATUS_THROW_WORK_INT_TARGET_HIT_GROUP),WorkModule::get_int64(boma, *FIGHTER_STATUS_THROW_WORK_INT_TARGET_HIT_NO));
      }
+     frame(lua_state,35.0);
+        FT_MOTION_RATE(fighter, 5.0/(38.0-3.0));
 }
 
 #[acmd_script( agent = "purin", script = "game_throwlw" , category = ACMD_GAME , low_priority)]
@@ -88,6 +112,7 @@ unsafe fn game_throwlw(fighter: &mut L2CAgentBase) {
      pub fn install() {
     install_acmd_scripts!(
         game_throwb,
+        expression_throwb,
         game_throwf,
         game_throwhi,
         game_throwlw,
